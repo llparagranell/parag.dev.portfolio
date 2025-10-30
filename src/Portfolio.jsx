@@ -12,66 +12,94 @@ const Portfolio = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
+  
+  const menuVariants = {
+    closed: {
+      opacity: 0,
+      y: -20,
+      transition: {
+        duration: 0.2,
+        ease: "easeInOut"
+      }
+    },
+    open: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.2,
+        ease: "easeOut"
+      }
+    }
+  };
 
   return (
     <div style={{ background: "#0a0a0a", color: "#e5e7eb", fontFamily: "Poppins, sans-serif", scrollBehavior: "smooth" }}>
       {/* ===== NAVBAR ===== */}
-      <header
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
+      <header className="navbar">
+        <div className="nav-content" style={{
+          maxWidth: "1200px",
+          margin: "0 auto",
           width: "100%",
-          background: "rgba(10,10,10,0.85)",
-          backdropFilter: "blur(10px)",
-          zIndex: 50,
-          borderBottom: "1px solid #1f2937",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          padding: "1rem 2rem",
-        }}
-      >
-        <h1 style={{ fontSize: "1.5rem", fontWeight: "700", color: "#fff" }}>Parag Rane</h1>
+          padding: "clamp(0.75rem, 2vw, 1rem) clamp(1rem, 3vw, 2rem)",
+        }}>
+          <h1 style={{ fontSize: "clamp(1.25rem, 3vw, 1.5rem)", fontWeight: "700", color: "#fff" }}>Parag Rane</h1>
 
-        {/* Desktop Nav */}
-        <nav className="desktop-nav" style={{ display: "flex", gap: "1.5rem" }}>
-          {["Home", "Skills", "Projects", "Achievements", "Education", "Contact"].map((item, i) => (
-            <a
-              key={i}
-              href={`#${item.toLowerCase()}`}
-              style={{ color: "#9ca3af", textDecoration: "none", fontWeight: "500" }}
-              onMouseEnter={(e) => (e.target.style.color = "#60a5fa")}
-              onMouseLeave={(e) => (e.target.style.color = "#9ca3af")}
-            >
-              {item}
-            </a>
-          ))}
-        </nav>
+          {/* Desktop Nav */}
+          <nav className="desktop-nav" style={{ display: "flex", gap: "clamp(1rem, 2vw, 1.5rem)" }}>
+            {["Home", "Skills", "Projects", "Achievements", "Education", "Contact"].map((item, i) => (
+              <a
+                key={i}
+                href={`#${item.toLowerCase()}`}
+                className="nav-link"
+                style={{ color: "#9ca3af", textDecoration: "none", fontWeight: "500", fontSize: "clamp(0.9rem, 1.5vw, 1rem)" }}
+                onMouseEnter={(e) => (e.target.style.color = "#60a5fa")}
+                onMouseLeave={(e) => (e.target.style.color = "#9ca3af")}
+              >
+                {item}
+              </a>
+            ))}
+          </nav>
 
-        {/* Mobile Menu Icon */}
-        <div className="mobile-menu-icon" style={{ display: "none" }}>
-          <button onClick={toggleMenu} style={{ background: "none", border: "none" }}>
-            {menuOpen ? <X color="#60a5fa" size={26} /> : <Menu color="#60a5fa" size={26} />}
+          {/* Mobile Menu Icon */}
+          <button 
+            onClick={toggleMenu} 
+            className="mobile-menu-icon" 
+            style={{ 
+              display: "none",
+              background: "none",
+              border: "none",
+              padding: "0.5rem",
+              cursor: "pointer",
+              color: "#60a5fa"
+            }}
+            aria-label="Toggle menu"
+          >
+            {menuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
 
         {/* Mobile Menu */}
-        {menuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            style={{
-              position: "absolute",
-              top: "100%",
-              right: "0",
-              background: "#111827",
-              width: "100%",
-              padding: "1rem",
-              textAlign: "center",
-              borderTop: "1px solid #1f2937",
-            }}
-          >
+        <motion.nav
+          className="mobile-menu"
+          initial="closed"
+          animate={menuOpen ? "open" : "closed"}
+          variants={menuVariants}
+          style={{
+            position: "absolute",
+            top: "100%",
+            left: 0,
+            right: 0,
+            background: "rgba(17,24,39,0.95)",
+            backdropFilter: "blur(8px)",
+            borderTop: "1px solid #1f2937",
+            padding: "0.5rem",
+            display: menuOpen ? "block" : "none",
+          }}
+        >
+          <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0.5rem" }}>
             {["Home", "Skills", "Projects", "Achievements", "Education", "Contact"].map((item, i) => (
               <a
                 key={i}
@@ -80,16 +108,27 @@ const Portfolio = () => {
                 style={{
                   display: "block",
                   color: "#e5e7eb",
-                  padding: "0.75rem 0",
+                  padding: "0.75rem 1rem",
                   textDecoration: "none",
                   fontSize: "1.1rem",
+                  borderRadius: "0.5rem",
+                  transition: "all 0.2s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.backgroundColor = "rgba(96,165,250,0.1)";
+                  e.target.style.color = "#60a5fa";
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.backgroundColor = "transparent";
+                  e.target.style.color = "#e5e7eb";
                 }}
               >
                 {item}
               </a>
             ))}
-          </motion.div>
-        )}
+          </div>
+        </motion.nav>
+        
       </header>
 
       {/* ===== HERO ===== */}
@@ -101,7 +140,7 @@ const Portfolio = () => {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          padding: "6rem 1rem 2rem",
+          padding: "clamp(4rem, 15vh, 6rem) clamp(1rem, 5vw, 2rem) clamp(2rem, 8vh, 3rem)",
           textAlign: "center",
         }}
       >
@@ -147,30 +186,115 @@ const Portfolio = () => {
       </Section>
 
       <Section id="contact" title="📬 Get in Touch">
-        <div style={{ maxWidth: 1000, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2rem", alignItems: "start" }}>
-          <div>
-            <p style={{ color: "#9ca3af", fontSize: "1.05rem", marginBottom: "0.6rem" }}>Let's collaborate on your next big idea — I'm available for freelance and full-time opportunities.</p>
+        <div className="contact-container" style={{ 
+          maxWidth: 1000, 
+          margin: "0 auto",
+        }}>
+          <div className="contact-info">
+            <p style={{ 
+              color: "#9ca3af", 
+              fontSize: "clamp(1rem, 2vw, 1.05rem)", 
+              marginBottom: "0.6rem" 
+            }}>
+              Let's collaborate on your next big idea — I'm available for freelance and full-time opportunities.
+            </p>
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.8rem", 
-              marginTop: "0.6rem" }}>
-              <a className="contact-card" href="mailto:paragrane000@gmail.com" style={{ textDecoration: "none", display: "flex", gap: "0.8rem", alignItems: "center", padding: "0.8rem", borderRadius: 10 }}>
-                <div style={{ width: 40, height: 40, borderRadius: 8, background: "rgba(37,99,235,0.08)", display: "flex", alignItems: "center", justifyContent: "center" }}><Mail color="#60a5fa" /></div>
+            <div className="contact-cards" style={{ 
+              display: "grid",
+              gap: "0.8rem",
+              marginTop: "0.6rem" 
+            }}>
+              <a 
+                className="contact-card" 
+                href="mailto:paragrane000@gmail.com" 
+                style={{ 
+                  textDecoration: "none",
+                  display: "flex",
+                  gap: "0.8rem",
+                  alignItems: "center",
+                  padding: "clamp(0.6rem, 2vw, 0.8rem)",
+                  borderRadius: 10,
+                  transition: "all 0.2s ease",
+                  background: "rgba(17, 24, 39, 0.3)"
+                }}
+              >
+                <div style={{ 
+                  width: 40, 
+                  height: 40, 
+                  borderRadius: 8, 
+                  background: "rgba(37,99,235,0.08)", 
+                  display: "flex", 
+                  alignItems: "center", 
+                  justifyContent: "center" 
+                }}>
+                  <Mail color="#60a5fa" />
+                </div>
                 <div style={{ color: "#e5e7eb" }}>
                   <div style={{ fontWeight: 700 }}>Email</div>
                   <div style={{ color: "#9ca3af", fontSize: "0.9rem" }}>paragrane000@gmail.com</div>
                 </div>
               </a>
 
-              <a className="contact-card" href="https://github.com/llparagranell" target="_blank" rel="noreferrer" style={{ textDecoration: "none", display: "flex", gap: "0.8rem", alignItems: "center", padding: "0.8rem", borderRadius: 10 }}>
-                <div style={{ width: 40, height: 40, borderRadius: 8, background: "rgba(96,165,250,0.06)", display: "flex", alignItems: "center", justifyContent: "center" }}><Github color="#60a5fa" /></div>
+              <a 
+                className="contact-card" 
+                href="https://github.com/llparagranell" 
+                target="_blank" 
+                rel="noreferrer" 
+                style={{ 
+                  textDecoration: "none",
+                  display: "flex",
+                  gap: "0.8rem",
+                  alignItems: "center",
+                  padding: "clamp(0.6rem, 2vw, 0.8rem)",
+                  borderRadius: 10,
+                  transition: "all 0.2s ease",
+                  background: "rgba(17, 24, 39, 0.3)"
+                }}
+              >
+                <div style={{ 
+                  width: 40, 
+                  height: 40, 
+                  borderRadius: 8, 
+                  background: "rgba(96,165,250,0.06)", 
+                  display: "flex", 
+                  alignItems: "center", 
+                  justifyContent: "center" 
+                }}>
+                  <Github color="#60a5fa" />
+                </div>
                 <div style={{ color: "#e5e7eb" }}>
                   <div style={{ fontWeight: 700 }}>GitHub</div>
                   <div style={{ color: "#9ca3af", fontSize: "0.9rem" }}>llparagranell</div>
                 </div>
               </a>
 
-              <a className="contact-card" href="https://linkedin.com/in/parag-rane-414089243" target="_blank" rel="noreferrer" style={{ textDecoration: "none", display: "flex", gap: "0.8rem", alignItems: "center", padding: "0.8rem", borderRadius: 10 }}>
-                <div style={{ width: 40, height: 40, borderRadius: 8, background: "rgba(99,102,241,0.06)", display: "flex", alignItems: "center", justifyContent: "center" }}><Linkedin color="#60a5fa" /></div>
+              <a 
+                className="contact-card" 
+                href="https://linkedin.com/in/parag-rane-414089243" 
+                target="_blank" 
+                rel="noreferrer" 
+                style={{ 
+                  textDecoration: "none",
+                  display: "flex",
+                  gap: "0.8rem",
+                  alignItems: "center",
+                  padding: "clamp(0.6rem, 2vw, 0.8rem)",
+                  borderRadius: 10,
+                  transition: "all 0.2s ease",
+                  background: "rgba(17, 24, 39, 0.3)"
+                }}
+              >
+                <div style={{ 
+                  width: 40, 
+                  height: 40, 
+                  borderRadius: 8, 
+                  background: "rgba(99,102,241,0.06)", 
+                  display: "flex", 
+                  alignItems: "center", 
+                  justifyContent: "center" 
+                }}>
+                  <Linkedin color="#60a5fa" />
+                </div>
                 <div style={{ color: "#e5e7eb" }}>
                   <div style={{ fontWeight: 700 }}>LinkedIn</div>
                   <div style={{ color: "#9ca3af", fontSize: "0.9rem" }}>parag-rane</div>
@@ -178,7 +302,17 @@ const Portfolio = () => {
               </a>
             </div>
 
-            <p style={{ color: "#9ca3af", marginTop: "0.8rem", fontSize: "0.9rem" }}>Prefer a quick message? Use the form on the right and I'll get back to you within 48 hours.</p>
+            <p style={{ 
+              color: "#9ca3af", 
+              marginTop: "1rem", 
+              fontSize: "clamp(0.85rem, 1.5vw, 0.9rem)",
+              display: "none",
+              "@media (min-width: 768px)": {
+                display: "block"
+              }
+            }}>
+              Prefer a quick message? Use the form and I'll get back to you within 48 hours.
+            </p>
           </div>
 
           <ContactForm />
@@ -193,9 +327,53 @@ const Portfolio = () => {
       {/* ===== RESPONSIVE STYLES ===== */}
       <style>
         {`
+          /* Base responsive styles */
+          @media (max-width: 640px) {
+            section { padding: 4rem 1rem !important; }
+            h2, h3 { font-size: clamp(1.8rem, 8vw, 2.5rem) !important; }
+            p { font-size: 0.95rem !important; }
+          }
+
+          /* Navbar styles */
+          .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(10,10,10,0.85);
+            backdrop-filter: blur(10px);
+            z-index: 50;
+            border-bottom: 1px solid #1f2937;
+          }
+
+          .nav-link {
+            transition: color 0.2s ease;
+            padding: 0.5rem 0;
+          }
+
           @media (max-width: 768px) {
             .desktop-nav { display: none !important; }
-            .mobile-menu-icon { display: block !important; }
+            .mobile-menu-icon { display: flex !important; align-items: center; justify-content: center; }
+            .mobile-menu { padding: 1rem; }
+            .mobile-menu a {
+              display: block;
+              padding: 0.75rem;
+              text-align: center;
+              font-size: 1.1rem;
+              border-radius: 8px;
+              transition: all 0.2s ease;
+            }
+            .mobile-menu a:hover {
+              background: rgba(96,165,250,0.1);
+            }
+            .contact-grid { 
+              grid-template-columns: 1fr !important;
+              gap: 2rem !important;
+            }
+            .project-grid, .achievement-grid { 
+              grid-template-columns: 1fr !important;
+              gap: 1.5rem !important;
+            }
           }
 
           /* Skill card hover */
@@ -258,24 +436,150 @@ const Portfolio = () => {
           }
 
           /* Contact styles */
+          .contact-container {
+            padding: clamp(1rem, 3vw, 2rem);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            align-items: start;
+          }
+
+          .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+          }
+
+          .contact-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 0.8rem;
+          }
+
           .contact-card {
             display: flex;
             gap: 0.8rem;
             align-items: center;
-            background: rgba(255,255,255,0.02);
-            border: 1px solid rgba(255,255,255,0.02);
+            background: rgba(17, 24, 39, 0.3);
+            border: 1px solid rgba(255,255,255,0.05);
             padding: 0.75rem;
             border-radius: 10px;
-            transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+            transition: all 180ms ease;
+            width: 100%;
           }
-          .contact-card:hover { transform: translateY(-6px); box-shadow: 0 12px 30px rgba(2,6,23,0.6); border-color: rgba(96,165,250,0.08); }
 
-          .contact-input { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); padding: 0.6rem 0.75rem; border-radius: 8px; color: #e5e7eb; }
-          .contact-input::placeholder { color: #6b7280; }
-          .contact-textarea { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); padding: 0.6rem 0.75rem; border-radius: 8px; color: #e5e7eb; resize: vertical; }
+          .contact-card:hover { 
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(2,6,23,0.6);
+            border-color: rgba(96,165,250,0.12);
+            background: rgba(17, 24, 39, 0.5);
+          }
 
-          .contact-btn { background: #2563eb; color: white; padding: 0.6rem 1rem; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; }
-          .contact-btn:hover { transform: translateY(-2px); }
+          .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            width: 100%;
+            max-width: 100%;
+          }
+
+          .contact-input, .contact-textarea { 
+            width: 100%;
+            background: rgba(17, 24, 39, 0.3);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: clamp(0.6rem, 2vw, 0.75rem);
+            border-radius: 8px;
+            color: #e5e7eb;
+            font-size: clamp(0.9rem, 1.5vw, 1rem);
+            transition: all 0.2s ease;
+          }
+
+          .contact-input:focus, .contact-textarea:focus {
+            outline: none;
+            border-color: rgba(96,165,250,0.3);
+            background: rgba(17, 24, 39, 0.5);
+          }
+
+          .contact-input::placeholder, .contact-textarea::placeholder { 
+            color: #6b7280;
+          }
+
+          .contact-textarea { 
+            min-height: 120px;
+            resize: vertical;
+          }
+
+          .contact-btn { 
+            background: #2563eb;
+            color: white;
+            padding: clamp(0.6rem, 2vw, 0.75rem) clamp(1rem, 3vw, 1.5rem);
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: clamp(0.9rem, 1.5vw, 1rem);
+            width: fit-content;
+          }
+
+          .contact-btn:hover { 
+            transform: translateY(-2px);
+            background: #2d6feb;
+          }
+
+          @media (max-width: 768px) {
+            .contact-container {
+              /* collapse the explicit columns on small screens */
+              grid-template-columns: none !important;
+              padding: 1rem;
+            }
+            
+            .contact-form {
+              margin-top: 1rem;
+            }
+
+            .contact-cards {
+              grid-template-columns: 1fr;
+            }
+
+            .contact-card {
+              padding: 0.6rem;
+            }
+          }
+
+          @media (max-width: 480px) {
+            .contact-card > div:first-child {
+              width: 36px !important;
+              height: 36px !important;
+            }
+          }
+
+          /* Responsive grid refinements */
+          @media (max-width: 1024px) {
+            .skill-card, .project-card, .achievement-card {
+              min-height: auto !important;
+              height: auto !important;
+            }
+          }
+
+          @media (max-width: 480px) {
+            .contact-card {
+              padding: 0.6rem !important;
+              gap: 0.5rem !important;
+            }
+            .contact-card > div:first-child {
+              width: 36px !important;
+              height: 36px !important;
+            }
+            .project-actions {
+              flex-direction: column !important;
+              align-items: stretch !important;
+            }
+            .project-tag {
+              font-size: 0.75rem !important;
+              padding: 0.2rem 0.5rem !important;
+            }
+          }
         `}
       </style>
     </div>
@@ -285,8 +589,8 @@ const Portfolio = () => {
 /* ---------- Subcomponents ---------- */
 
 const Section = ({ id, title, children }) => (
-  <section id={id} style={{ padding: "6rem 1.5rem", maxWidth: "1200px", margin: "0 auto" }}>
-    <motion.h3 {...fade(0)} style={{ fontSize: "clamp(1.8rem, 4vw, 2.2rem)", fontWeight: "600", marginBottom: "2.5rem", display: "flex", alignItems: "center", gap: "0.8rem", color: "white" }}>
+  <section id={id} style={{ padding: "clamp(4rem, 12vh, 6rem) clamp(1rem, 5vw, 1.5rem)", maxWidth: "1200px", margin: "0 auto" }}>
+    <motion.h3 {...fade(0)} style={{ fontSize: "clamp(1.8rem, 4vw, 2.2rem)", fontWeight: "600", marginBottom: "clamp(1.5rem, 5vh, 2.5rem)", display: "flex", alignItems: "center", gap: "0.8rem", color: "white" }}>
       {title}
     </motion.h3>
     {children}
@@ -296,6 +600,7 @@ const Section = ({ id, title, children }) => (
 const SkillGrid = () => {
   // Flat list of skills with a simple proficiency (0-100)
   const skills = [
+     { name: "Java", level: 75 },
     { name: "JavaScript", level: 85 },
     { name: "React.js", level: 90 },
     { name: "Node.js", level: 80 },
