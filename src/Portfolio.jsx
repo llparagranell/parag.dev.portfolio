@@ -2,6 +2,13 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Github, Linkedin, Mail, Menu, X, Code2, Award, BookOpen, ChevronDown } from "lucide-react";
 
+// Import video files
+import roomBookingVideo from './videos/tourbooking.mp4';
+import stockPortfolioVideo from './videos/stock.mp4';
+import erpSystemVideo from './videos/erpSystemVideo.mp4';
+// import doctooVideo from './videos/doctoo.mp4';
+import chatAppVideo from './videos/chat.mp4';
+
 const fade = (delay = 0) => ({
   initial: { opacity: 0, y: 40 },
   animate: { opacity: 1, y: 0 },
@@ -554,11 +561,46 @@ const Portfolio = () => {
             }
           }
 
+          /* Project video styles */
+          .video-container {
+            transition: transform 0.3s ease;
+          }
+
+          .project-card:hover .video-container {
+            transform: scale(1.02);
+          }
+
+          .video-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(17, 24, 39, 0) 0%, rgba(17, 24, 39, 0.8) 100%);
+            pointer-events: none;
+            opacity: 0.6;
+            transition: opacity 0.3s ease;
+          }
+
+          .project-card:hover .video-container::after {
+            opacity: 0;
+          }
+
           /* Responsive grid refinements */
           @media (max-width: 1024px) {
             .skill-card, .project-card, .achievement-card {
               min-height: auto !important;
               height: auto !important;
+            }
+
+            .project-grid {
+              grid-template-columns: 1fr !important;
+            }
+
+            .video-container {
+              margin: -1rem -1rem 1rem -1rem;
+              border-radius: 0;
             }
           }
 
@@ -643,28 +685,32 @@ const ProjectGrid = () => {
       title: "Room Booking Web App",
       desc: "Full-stack app with secure login, search, and booking using MERN stack.",
       link: "https://github.com/llparagranell/tourbooking",
+      video: roomBookingVideo
     },
     {
       title: "Stock Portfolio Management",
       desc: "MERN app to track stock investments with real-time community discussion board.",
       link: "https://github.com/llparagranell/connect",
+      video: stockPortfolioVideo
     },
     {
       title: "University ERP System",
       desc: "MERN app to manage University ERP System.",
       link: "https://github.com/llparagranell/College-Erp-Mini-Project",
+      video: erpSystemVideo
     },
-     {
+    {
       title: "DOCTOO",
       desc: "Doctor appointment booking web application with AI consulting.",
       link: "https://github.com/llparagranell/",
+      // video: doctooVideo
     },
     {
       title: "CHAT App",
       desc: "Chatting a Application using MERN Stack and Socket.io for real-time communication.",
       link: "https://github.com/llparagranell/Chat-App",
-    },
-
+      video: chatAppVideo
+    }
   ];
   // add optional tags/tech for each project for nicer display
   const enriched = projects.map((p) => ({
@@ -679,8 +725,67 @@ const ProjectGrid = () => {
   return (
     <div className="project-grid" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(320px, 1fr))", gap: "2rem" }}>
       {enriched.map((p, i) => (
-  <motion.div key={i} {...fade(i * 0.08)} className="project-card" style={{ ...card, textAlign: "left", display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: 220 }}>
+        <motion.div 
+          key={i} 
+          {...fade(i * 0.08)} 
+          className="project-card" 
+          style={{ 
+            ...card, 
+            textAlign: "left", 
+            display: "flex", 
+            flexDirection: "column", 
+            justifyContent: "space-between", 
+            minHeight: 220,
+            overflow: "hidden"
+          }}
+        >
           <div>
+            {p.video && (
+              <div className="video-container" style={{ 
+                marginBottom: "1rem", 
+                borderRadius: "8px",
+                overflow: "hidden",
+                position: "relative",
+                paddingTop: "56.25%", // 16:9 aspect ratio
+                background: "rgba(17, 24, 39, 0.4)",
+                border: "1px solid rgba(255,255,255,0.05)"
+              }}>
+                <video
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover"
+                  }}
+                  preload="metadata"
+                  playsInline
+                  muted
+                  loop
+                  onMouseEnter={(e) => {
+                    const playPromise = e.target.play();
+                    if (playPromise !== undefined) {
+                      playPromise.catch(error => {
+                        console.log("Video play failed:", error);
+                      });
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.pause();
+                    e.target.currentTime = 0;
+                  }}
+                  onError={(e) => {
+                    console.log("Video failed to load:", e.target.error);
+                    e.target.style.display = 'none';
+                  }}
+                >
+                  <source src={p.video} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+            )}
+            
             <h4 style={{ color: "#60a5fa", fontWeight: "600", marginBottom: "0.4rem" }}>{p.title}</h4>
             <p style={{ color: "#9ca3af", margin: "0.5rem 0 1rem" }}>{p.desc}</p>
 
@@ -695,7 +800,6 @@ const ProjectGrid = () => {
             <a href={p.link} target="_blank" rel="noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "#111827", border: "1px solid rgba(37,99,235,0.12)", color: "#60a5fa", padding: "0.5rem 0.8rem", borderRadius: 8, textDecoration: "none", fontWeight: 600 }}>
               <Github size={16} /> View on GitHub
             </a>
-            {/* placeholder for demo button if needed later */}
           </div>
         </motion.div>
       ))}
