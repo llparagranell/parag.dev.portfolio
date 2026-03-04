@@ -80,7 +80,7 @@ const Hero = () => {
                     position: "absolute",
                     inset: 0,
                     background: "rgba(0,0,0,0.45)",
-                    zIndex: 0,
+                    zIndex: 1,
                     pointerEvents: "none",
                 }}
             />
